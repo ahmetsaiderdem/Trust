@@ -5,6 +5,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
@@ -46,13 +47,25 @@ public class ProductRepository {
         return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
     }
 
-    public int update(int id,Product p ){
-        String sql="UPDATE products SET name=?, price=?, stock=?, active=? WHERE id = ?";
-        return jdbc.update(sql,p.getName(), p.getPrice(), p.getStock(), p.isActive());
-
+    public int update(int id, Product p ){
+        String sql = "UPDATE products SET name=?, price=?, stock=?, active=? WHERE id = ?";
+        return jdbc.update(sql, p.getName(), p.getPrice(), p.getStock(), p.isActive(), id);
     }
+
 
     public int delete(int id){
         return jdbc.update("DELETE FROM products WHERE id=?",id);
+    }
+
+    public BigDecimal getPriceById(int productId) {
+        String sql = "SELECT price FROM products WHERE id = ?";
+        return jdbc.queryForObject(sql, (rs, rowNum) -> rs.getBigDecimal("price"), productId);
+    }
+
+    public int decreaseStockIfEnough(int productId,int quantity){
+        String sql="UPDATE products " +
+                "SET stock = stock - ? " +
+                "WHERE id = ? AND active = 1 AND stock >= ?";
+        return jdbc.update(sql,quantity,productId,quantity);
     }
 }
