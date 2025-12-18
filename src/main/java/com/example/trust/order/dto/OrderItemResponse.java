@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 public class OrderItemResponse {
 
     private int productId;
+    private String productName;
     private int quantity;
     private BigDecimal unitPrice;
+
 
     public int getProductId() {
         return productId;
@@ -30,5 +32,13 @@ public class OrderItemResponse {
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }

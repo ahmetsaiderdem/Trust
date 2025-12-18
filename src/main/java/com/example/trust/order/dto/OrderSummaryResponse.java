@@ -9,6 +9,8 @@ public class OrderSummaryResponse {
     private BigDecimal totalAmount;
     private String status;
     private LocalDateTime createdAt;
+    private int lineCount;
+    private int itemsCount;
 
     public int getId() {
         return id;
@@ -48,5 +50,21 @@ public class OrderSummaryResponse {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public int getItemsCount() {
+        return itemsCount;
+    }
+
+    public void setItemsCount(int itemsCount) {
+        this.itemsCount = itemsCount;
+    }
+
+    public int getLineCount() {
+        return lineCount;
+    }
+
+    public void setLineCount(int lineCount) {
+        this.lineCount = lineCount;
     }
 }
