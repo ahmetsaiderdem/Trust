@@ -37,5 +37,23 @@ public class CartRepository {
     public int clear(int userId){
         return jdbc.update("DELETE FROM cart_items WHERE user_id=?", userId);
     }
-    
+
+    public int decreaseOrRemove(int userId, int productId) {
+        // 1) quantity > 1 ise 1 azalt
+        int updated = jdbc.update(
+                "UPDATE cart_items SET quantity = quantity - 1 " +
+                        "WHERE user_id = ? AND product_id = ? AND quantity > 1",
+                userId, productId
+        );
+        if (updated > 0) return updated;
+
+        // 2) quantity = 1 ise satırı sil
+        return jdbc.update(
+                "DELETE FROM cart_items WHERE user_id = ? AND product_id = ? AND quantity = 1",
+                userId, productId
+        );
+    }
+
+
+
 }

@@ -53,11 +53,6 @@ public class ApiExceptionHandler {
         ));
     }
 
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<?> handleIllegalState(IllegalStateException e) {
-        return ResponseEntity.badRequest().body(Map.of(
-                "error", "BUSINESS_ERROR",
-                "message", e.getMessage()
-        ));
-    }
+
+
 }

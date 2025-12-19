@@ -1,6 +1,8 @@
 package com.example.trust.cart;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,12 +22,21 @@ public class CartService {
         return repo.findByUserId(userId);
     }
 
-    public void remove(int userId,int productId){
-        repo.removeItem(userId,productId);
+    public void remove(int userId, int productId) {
+        repo.removeItem(userId, productId);
     }
 
-    public void clear(int userId){
+    public void clear(int userId) {
         repo.clear(userId);
     }
+
+    public void decrease(int userId, int productId) {
+        int affected = repo.decreaseOrRemove(userId, productId);
+        if (affected == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart item not found");
+        }
+    }
+
+
 
 }

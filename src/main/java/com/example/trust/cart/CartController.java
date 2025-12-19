@@ -2,6 +2,7 @@ package com.example.trust.cart;
 
 import com.example.trust.cart.dto.AddCartRequest;
 import com.example.trust.checkout.CheckoutService;
+import com.example.trust.security.SecurityUtils;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,30 +23,44 @@ public class CartController {
 
     @PostMapping("/items")
     public ResponseEntity<Void> add(@Valid @RequestBody AddCartRequest req){
-        service.add(req.getUserId(),req.getProductId(),req.getQuantity());
+        int userId= SecurityUtils.requiredUserId();
+        service.add(userId,req.getProductId(),req.getQuantity());
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{userId}")
-    public List<CartItem> get(@PathVariable int userId){
+    @GetMapping
+    public List<CartItem> get(){
+        int userId = SecurityUtils.requiredUserId();
         return service.get(userId);
     }
 
     @DeleteMapping("/items")
-    public ResponseEntity<Void> remove(@RequestParam int userId,@RequestParam int productId){
+    public ResponseEntity<Void> remove(@RequestParam int productId){
+        int userId=SecurityUtils.requiredUserId();
         service.remove(userId,productId);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> clear(@PathVariable int userId){
+    @DeleteMapping
+    public ResponseEntity<Void> clear(){
+       int userId=SecurityUtils.requiredUserId();
         service.clear(userId);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{userId}/checkout")
-    public ResponseEntity<?> checkout(@PathVariable int userId){
+    @PostMapping("/checkout")
+    public ResponseEntity<?> checkout(){
+        int userId  =SecurityUtils.requiredUserId();
         int orderId= checkoutService.checkout(userId);
         return ResponseEntity.status(201).body(java.util.Map.of("orderId",orderId));
     }
+
+    @PatchMapping("/items/decrease")
+    public ResponseEntity<Void> decrease(@RequestParam int productId){
+        int userId = SecurityUtils.requiredUserId();
+        service.decrease(userId, productId);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

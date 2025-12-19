@@ -4,17 +4,9 @@ import jakarta.validation.constraints.Min;
 
 public class AddCartRequest {
 
-    @Min(1) private int userId;
+
     @Min(1) private int productId;
     @Min(1) private int quantity;
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public int getProductId() {
         return productId;

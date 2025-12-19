@@ -2,6 +2,7 @@ package com.example.trust.order;
 
 import com.example.trust.order.dto.OrderDetailResponse;
 import com.example.trust.order.dto.OrderSummaryResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +21,10 @@ public class OrderService {
         return repo.findByUserId(userId);
     }
 
-    public OrderDetailResponse getDetail(int orderId){
+    public OrderDetailResponse getDetailForUser(int userId,int orderId){
         var headerOpt= repo.findOrderHeader(orderId);
-        if (headerOpt.isEmpty()){
-            throw new IllegalStateException("Order not found");
+        if (headerOpt.isEmpty() || headerOpt.get().getUserId() != userId){
+            throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND,"Order not found");
         }
 
         var header=headerOpt.get();

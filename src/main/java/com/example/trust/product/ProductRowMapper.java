@@ -15,6 +15,7 @@ public class ProductRowMapper implements RowMapper<Product> {
         p.setPrice(rs.getDouble("price"));
         p.setStock(rs.getInt("stock"));
         p.setActive(rs.getBoolean("active"));
+
         return p;
     }
 }
